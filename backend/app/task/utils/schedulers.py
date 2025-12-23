@@ -25,6 +25,7 @@ from backend.database.db import async_db_session
 from backend.database.redis import redis_client
 from backend.utils._await import run_await
 from backend.utils.serializers import select_as_dict
+from backend.utils.snowflake import snowflake
 from backend.utils.timezone import timezone
 
 if TYPE_CHECKING:
@@ -284,6 +285,9 @@ class DatabaseScheduler(Scheduler):
     def __init__(self, *args, **kwargs) -> None:
         self.app = kwargs['app']
         self._dirty = set()
+        # 初始化雪花算法（同步方式）
+        if not snowflake._initialized:
+            run_await(snowflake.init)()
         super().__init__(*args, **kwargs)
         self._finalize = Finalize(self, self.sync, exitpriority=5)
         self.max_interval = kwargs.get('max_interval') or self.app.conf.beat_max_loop_interval or DEFAULT_MAX_INTERVAL

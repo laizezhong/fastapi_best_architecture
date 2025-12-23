@@ -24,3 +24,9 @@ async def task_demo_params(hello: str, world: str | None = None) -> str:
     """参数示例任务，模拟传参操作"""
     await asleep(1)
     return hello + world
+
+@celery_app.task(name='task_demo_params_22222')
+async def task_demo_params_2(hello: str, world: str | None = None) -> str:
+    """参数示例任务，模拟传参操作"""
+    await asleep(1)
+    return hello + world

@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     DATABASE_POOL_ECHO: bool | Literal['debug'] = False
     DATABASE_SCHEMA: str = 'fba'
     DATABASE_CHARSET: str = 'utf8mb4'
-    DATABASE_PK_MODE: Literal['autoincrement', 'snowflake'] = 'autoincrement'
+    DATABASE_PK_MODE: Literal['autoincrement', 'snowflake'] = 'snowflake' # autoincrement: 自增ID， snowflake： 雪花ID
 
     # .env Redis
     REDIS_HOST: str
@@ -288,6 +288,7 @@ class Settings(BaseSettings):
             values['FASTAPI_STATIC_FILES'] = False
 
             # task
+            # dev 环境默认使用 redis，如果是 prod 环境，则使用 rabbitmq
             values['CELERY_BROKER'] = 'rabbitmq'
 
         return values
